@@ -1,0 +1,45 @@
+.balanceCard {
+  display:flex;
+  word-wrap: break-word;
+  align-items: center;
+  justify-content: space-between;
+  margin:0.5rem 1rem;
+  padding:1rem;
+}
+.balanceCard.income {
+  border: solid 1px forestgreen;
+}
+.balanceCard.expense {
+  border: solid 1px tomato;
+}
+
+.balanceCard .balanceBtn{
+  display:inline-flex;
+  align-items: center;
+  justify-content: center;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background-color:white;
+  cursor:pointer;
+  margin-left: 1rem;
+  cursor: pointer;
+  border:1px solid;
+  font-weight: bolder;
+  font-size: 1rem;
+}
+
+.balanceCard.income .balanceBtn {
+  border-color: forestgreen;
+}
+.balanceCard.income .balanceBtn:hover {
+  background-color: forestgreen;
+  color: white;
+}
+.balanceCard.expense .balanceBtn {
+  border-color: tomato;
+}
+.balanceCard.expense .balanceBtn:hover {
+  background-color: tomato;
+  color: white;
+}

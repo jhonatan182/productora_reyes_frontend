@@ -1,0 +1,22 @@
+.listItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;;
+  border-bottom: 1px solid #e0e0e0;
+  margin: 0.5rem 1rem;
+}
+
+.listItem div{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width:100%;
+  padding:0.5rem 1rem;
+}
+
+.listItem div:first-child{
+  font-size: 1.1rem;
+  font-weight: bold;
+}
