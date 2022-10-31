@@ -1,0 +1,48 @@
+.paging{
+  margin:0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+.paging_page{
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  width:32px;
+  height:32px;
+  font-size: 0.9rem;
+  margin-left:5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+.paging_page.current{
+  background-color: #ccc;
+  cursor: default;
+}
+.paging__limit {
+  display: flex;
+  align-items: center;
+}
+
+.paging_page.sep{
+  cursor: default;
+}
+.paging_page:hover{
+  background-color: #ccc;
+}
+.paging_page.sep:hover{
+  background-color: transparent;
+}
+.paging__limit span{
+  font-size: 0.9rem;
+  margin-right:0.4rem;
+}
+.paging__limit select{
+  width:3rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  padding:0.25rem;
+  font-size: 0.9rem;
+}

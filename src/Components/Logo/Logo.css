@@ -1,0 +1,9 @@
+img {
+    padding: 5px;
+    width: 150px;
+    justify-items: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
