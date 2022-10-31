@@ -30,7 +30,7 @@ const Splash = () => {
       useAbsoluteCenter={true}
       showNavBar={false}
     >
-      <h1 style={h1SplashStyle}>Vaccination App <br /> v1.0.0</h1>
+      <h1 style={h1SplashStyle}>Productora Reyes <br /> v1.0.0</h1>
     </Page>
   )
 }
