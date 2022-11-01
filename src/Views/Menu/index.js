@@ -24,6 +24,12 @@ const Menu = () => {
     const proveedores = () => {
         Navigator('/proveedores');
     }
+    const facturacion = () => {
+        Navigator('/facturacion');
+    }
+    const reportes = () => {
+        Navigator('/reportes');
+    }
     return (
        
         <Page
@@ -41,6 +47,8 @@ const Menu = () => {
                         <button class="button button1" onClick={empleados}>Empleados</button>
                         <button class="button button2" onClick={clientes}>Clientes</button>
                         <button class="button button2" onClick={proveedores}>Proveedores</button>
+                        <button class="button button1" onClick={facturacion}>Empleados</button>
+                        <button class="button button2" onClick={reportes}>Reportes</button>
                     </Buttons>
                 </div>
             </div>
