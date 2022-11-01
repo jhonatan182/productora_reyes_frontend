@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Route, Routes as Switch, Navigate } from 'reac
 import GetData from './Views/Inventario/TablaInventario';
 import LoginInUx from './Views/Login/LoginUX';
 import Menu from './Views/Menu';
-import SignInUx from './Views/Signin/SignInUx';
 
 const Routes = () => {
   return (
@@ -12,7 +11,6 @@ const Routes = () => {
         <Route path="/login" element={<LoginInUx />} />
         <Route path="/productos" element={<GetData />} />
         <Route path="/menu" element={<Menu />} />
-        <Route path="/signin" element={<SignInUx />} />
       </Switch>
     </Router>
   );

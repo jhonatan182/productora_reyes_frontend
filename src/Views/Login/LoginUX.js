@@ -2,7 +2,7 @@ import Page from "../../Components/Page";
 import { Field } from '../../Components/InputField';
 import Buttons from '../../Components/Buttons';
 import ErrorField from "../../Components/ErrorField";
-import Logo from '../../Components/Images/logo.png';
+import Logo from '../../Components/Images/LogoProycomerCircular.png';
 import Button from '@mui/material/Button';
 
 const LoginInUx = ({
@@ -38,8 +38,7 @@ const LoginInUx = ({
           onChange={onChangeHandler}
         />
         <Buttons>
-          <button className="button button1" onClick={onLoginClick}>Iniciar Sesión</button>
-          <button className="button button2" onClick={onSignInClick}>¿No tienes cuenta? Crea una</button>
+          <button className="buttonlogin button1" onClick={onLoginClick}>Iniciar Sesión</button>
         </Buttons>
         <div style={{textAlign: "center"}}>
         <Button onClick={password}>¿Olvidaste tu Contraseña?</Button>
