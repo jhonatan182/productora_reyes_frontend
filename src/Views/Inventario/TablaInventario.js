@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import MaterialTable from "material-table";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import {Modal, TextField, Button} from '@material-ui/core';
+import {Modal, TextField, Button, Icon} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import newProduct from '../../Services/api/inventarioapi';
+import { Edit } from '@material-ui/icons';
+import { Delete } from '@material-ui/icons';
+import { Search } from '@material-ui/icons';
 
 const columns= [
   { title: 'Producto', field: 'producto' },
@@ -40,33 +43,25 @@ function GetData() {
 const Navigator = useNavigate();
   const styles= useStyles();
   const [data, setData]= useState([]);
+  const [modalInsertar, setModalInsertar]= useState(false);
+  const [modalEditar, setModalEditar]= useState(false);
+  const [modalEliminar, setModalEliminar]= useState(false);
   const [formValues, setFormValues] = useState({ 
     codigo_producto: '',
-    nombre: '',
+    producto: '',
     descripcion: '',
     stock: '',
     precio_producto: '',
     proveedor_id: ''
 });
-  const [modalInsertar, setModalInsertar]= useState(false);
-  const [modalEditar, setModalEditar]= useState(false);
-  const [modalEliminar, setModalEliminar]= useState(false);
-  const [productoSeleccionado, setProductoSeleccionado]=useState({
-    codigo_producto: '',
-    nombre: '',
-    descripcion: '',
-    stock: '',
-    precio_producto: '',
-    proveedor_id: ''
-  })
 
   const handleChange= e =>{
-    let { name, value } = e.target;
-    let newFormValues = {
-      ...formValues,
+    const { name, value } = e.target;
+    setFormValues(prevstate => ({
+      ...prevstate,
       [name]: value
-    }
-    setFormValues(newFormValues);
+    }))
+    console.log(formValues);
   }
 
   const peticionGet=async()=>{
@@ -82,22 +77,51 @@ const Navigator = useNavigate();
   const peticionPost = async () => {
     try {
         const data = await newProduct(
-        formValues.nombre,
+        formValues.producto,
         formValues.descripcion,
         formValues.stock,
         formValues.precio_producto,
         formValues.proveedor_id,
         );
         console.log(data);
-        Navigator('/InventarioTable')
+        Navigator('/productos')
       } catch (ex) {
         console.log(ex);
       }
   }
 
+  const peticionPut = async () => {
+    await axios.put(baseUrl + "editar-producto/" + formValues.codigo_producto, formValues)
+    .then(response => {
+      var dataNueva = data;
+      dataNueva.map(producto => {
+        if (producto.codigo_producto === formValues.codigo_producto){
+          producto.producto=formValues.producto;
+          producto.descripcion=formValues.descripcion;
+          producto.stock=formValues.stock;
+          producto.precio_producto=formValues.precio_producto;
+          producto.proveedor_id=formValues.proveedor_id;
+        }
+      });
+      setData(dataNueva);
+      abrirCerrarModalEditar();
+    }).catch(error => {
+      console.log(error)
+    })
+  }
 
-  const seleccionarProducto=(artista, caso)=>{
-    setProductoSeleccionado(artista);
+  const peticionDelete=async()=>{
+    await axios.delete(baseUrl+"/eliminar-producto/"+formValues.codigo_producto)
+    .then(response=>{
+      setData(data.filter(producto=>producto.codigo_producto!==formValues.codigo_producto));
+      abrirCerrarModalEliminar();
+    }).catch(error=>{
+      console.log(error);
+    })
+  }
+
+  const seleccionarProducto=(nombre, caso)=>{
+    setFormValues(nombre);
     (caso==="Editar")?abrirCerrarModalEditar()
     :
     abrirCerrarModalEliminar()
@@ -107,7 +131,6 @@ const Navigator = useNavigate();
     setModalInsertar(!modalInsertar);
   }
 
-  
   const abrirCerrarModalEditar=()=>{
     setModalEditar(!modalEditar);
   }
@@ -123,7 +146,7 @@ const Navigator = useNavigate();
   const bodyInsertar=(
     <div className={styles.modal}>
       <h3>Agregar Nuevo Producto</h3>
-      <TextField className={styles.inputMaterial} label="Producto" name="nombre" onChange={handleChange}/>
+      <TextField className={styles.inputMaterial} label="Producto" name="producto" onChange={handleChange}/>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion" onChange={handleChange}/>          
       <br />
@@ -140,16 +163,35 @@ const Navigator = useNavigate();
     </div>
   )
 
-  const bodyEliminar=(
+  const bodyEditar=(
     <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar el producto<b>{productoSeleccionado && productoSeleccionado.codigo_producto}</b>? </p>
+      <h3>Editar Producto</h3>
+        <TextField className={styles.inputMaterial} label="Producto" name="producto" onChange={handleChange} value={formValues&&formValues.producto}/>
+        <br />
+        <TextField className={styles.inputMaterial} label="Descripcion" name="descripcion" onChange={handleChange} value={formValues&&formValues.descripcion}/>          
+        <br />
+        <TextField className={styles.inputMaterial} label="Stock" name="stock" onChange={handleChange} value={formValues&&formValues.stock}/>
+        <br />
+        <TextField className={styles.inputMaterial} label="Precio Producto" name="precio_producto" onChange={handleChange} value={formValues&&formValues.precio_producto}/>
+        <br />
+        <TextField className={styles.inputMaterial} label="ID Proveedor" name="proveedor_id" onChange={handleChange} value={formValues&&formValues.proveedor_id}/>
+        <br /><br />
       <div align="right">
-        <Button color="secondary">Sí</Button>
-        <Button onClick={()=>abrirCerrarModalEliminar()}>No</Button>
+        <Button color="primary" onClick={() => peticionPut()}>Editar</Button>
+        <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
       </div>
     </div>
   )
 
+  const bodyEliminar=(
+    <div className={styles.modal}>
+      <p>Estás seguro que deseas eliminar el producto <b>{formValues && formValues.producto}</b>? </p>
+      <div align="right">
+        <Button color="secondary" onClick={() => peticionDelete()}>Sí</Button>
+        <Button onClick={()=>abrirCerrarModalEliminar()}>No</Button>
+      </div>
+    </div>
+  )
 
   return (
     <div className="App">
@@ -162,18 +204,19 @@ const Navigator = useNavigate();
           title="Inventario"  
           actions={[
             {
-              icon: 'edit',
-              tooltip: 'Editar Artista',
-              onClick: (rowData) => seleccionarProducto(rowData, "Editar")
+              icon: Edit,
+              tooltip: 'Editar Producto',
+              onClick: (event, rowData) => seleccionarProducto(rowData, "Editar")
             },
             {
-              icon: 'delete',
-              tooltip: 'Eliminar Artista',
-              onClick: (rowData) => seleccionarProducto(rowData, "Eliminar")
+              icon: Delete,
+              tooltip: 'Eliminar Producto',
+              onClick: (event, rowData) => seleccionarProducto(rowData, "Eliminar")
             }
           ]}
           options={{
             actionsColumnIndex: -1,
+            search: Search,
           }}
           localization={{
             header:{
@@ -187,6 +230,17 @@ const Navigator = useNavigate();
            {bodyInsertar}
         </Modal>
 
+        <Modal
+          open={modalEditar}
+          onClose={abrirCerrarModalEditar}>
+          {bodyEditar}
+        </Modal>
+
+        <Modal
+          open={modalEliminar}
+          onClose={abrirCerrarModalEditar}>
+          {bodyEliminar}
+        </Modal>
     </div>
   );
 }
