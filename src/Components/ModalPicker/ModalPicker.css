@@ -1,0 +1,15 @@
+.buttons button {
+  background-Color: transparent;
+  color: rgb(14, 168, 53);
+  border: none;
+  padding-left: 830px;
+  font-size: 25px;
+}
+
+.closebutton{
+  background-Color: transparent;
+  color: red;
+  border: none;
+  padding-left: 180px;
+  font-size: 15px;
+}

@@ -1,0 +1,23 @@
+section.action{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  margin: 1rem;
+  border: none;
+  background-color: transparent;
+}
+
+section.action button{
+  padding:0.75rem 1rem;
+  background-color: transparent;
+  border-radius: 27px;
+  border: none;
+  border: 1px solid #e6e6e6;
+  transition: background-color 0.2s ease-in-out;
+}
+
+section.action button:hover{
+  background-color: #e6e6e6;
+}
