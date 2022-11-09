@@ -28,7 +28,7 @@ const Menu = () => {
         Navigator('/facturacion');
     }
     const reportes = () => {
-        Navigator('/reportes');
+        Navigator('/reportes/productosMasVendidos');
     }
     return (
        
