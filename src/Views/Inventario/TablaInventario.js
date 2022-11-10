@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import MaterialTable from "material-table";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import {Modal, TextField, Button, Icon} from '@material-ui/core';
+import {Modal, TextField, Button} from '@material-ui/core';
+import { axiosPrivate } from '../../Services/api/axios';
 import {makeStyles} from '@material-ui/core/styles';
 import newProduct from '../../Services/api/inventarioapi';
 import { Edit } from '@material-ui/icons';
@@ -65,7 +66,7 @@ const Navigator = useNavigate();
   }
 
   const peticionGet=async()=>{
-    await axios.get(baseUrl)
+    await axiosPrivate.get(baseUrl)
     .then(response=>{
      setData(response.data);
      console.log(response.data)
@@ -140,6 +141,9 @@ const Navigator = useNavigate();
   }
 
   useEffect(()=>{
+    const auth =
+      JSON.parse(localStorage.getItem('auth'))
+      if(!auth)Navigator('/login')
     peticionGet();
   }, [])
 
