@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import MaterialTable from "material-table";
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {Modal, TextField, Button} from '@material-ui/core';
 import { axiosPrivate } from '../../Services/api/axios';
@@ -92,7 +91,7 @@ const Navigator = useNavigate();
   }
 
   const peticionPut = async () => {
-    await axios.put(baseUrl + "editar-producto/" + formValues.codigo_producto, formValues)
+    await axiosPrivate.put(baseUrl + "editar-producto/" + formValues.codigo_producto, formValues)
     .then(response => {
       var dataNueva = data;
       dataNueva.map(producto => {
@@ -112,7 +111,7 @@ const Navigator = useNavigate();
   }
 
   const peticionDelete=async()=>{
-    await axios.delete(baseUrl+"/eliminar-producto/"+formValues.codigo_producto)
+    await axiosPrivate.delete(baseUrl+"/eliminar-producto/"+formValues.codigo_producto)
     .then(response=>{
       setData(data.filter(producto=>producto.codigo_producto!==formValues.codigo_producto));
       abrirCerrarModalEliminar();
