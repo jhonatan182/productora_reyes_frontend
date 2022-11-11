@@ -1,19 +1,41 @@
+import { useState } from "react";
+import {useNavigate} from 'react-router-dom'
 import Page from "../../Components/Page";
 import { Field } from '../../Components/InputField';
 import Buttons from '../../Components/Buttons';
 import ErrorField from "../../Components/ErrorField";
 import Logo from '../../Components/Images/LogoProycomerCircular.png';
 import Button from '@mui/material/Button';
+import { useDispatch } from 'react-redux';
+import { submitLogin, cleanLoginError } from './LoginActions';
+
 
 const LoginInUx = ({
-  emailValue = "",
-  passwordValue = "",
   error = "",
-  onChangeHandler = () => { },
-  onSignInClick = () => { },
-  onLoginClick = () => { },
-  password = () => {}
-}) => {
+  }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [formValues, setFormValues] = useState({ usuario: '', password: '' });
+
+  const onChangeHandler= e =>{
+    setFormValues({
+      ...formValues,
+      [e.target.name] :e.target.value
+    })
+  }
+
+  const onLoginClick = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await submitLogin(dispatch, formValues.usuario, formValues.password);
+      navigate('/menu')
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+
+
   return (
     <Page
       showNavBar={true}
@@ -24,24 +46,24 @@ const LoginInUx = ({
       <form style={{ minWidth: "380px", maxWidth: "640px" }}>
         <h1 style={{textAlign: "center"}}>Iniciar sesión</h1>
         <Field
-          name="email"
+          name="usuario"
           labelText="Usuario"
-          type="email"
-          value={emailValue}
+          type="text"
+          value={formValues.usuario}
           onChange={onChangeHandler}
         />
         <Field
           name="password"
           labelText="Contraseña"
           type="password"
-          value={passwordValue}
+          value={formValues.password}
           onChange={onChangeHandler}
         />
         <Buttons>
-          <button className="buttonlogin button1" onClick={onLoginClick}>Iniciar Sesión</button>
+          <button type="submit" className="buttonlogin button1" onClick={onLoginClick}>Iniciar Sesión</button>
         </Buttons>
         <div style={{textAlign: "center"}}>
-        <Button onClick={password}>¿Olvidaste tu Contraseña?</Button>
+        <Button>¿Olvidaste tu Contraseña?</Button>
         </div>
         {error && <ErrorField>{error}</ErrorField>}
       </form>
