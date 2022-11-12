@@ -4,10 +4,12 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official"
 import { Select, MenuItem, InputLabel, FormControl, Input } from "@material-ui/core";
 import NavigatorReportes from "./navigatorReportes";
+import { useNavigate } from 'react-router-dom';
 
 
 const ProductosMasVendidos = () => {
-const [products, setProducts] = useState( [] )
+  const Navigator = useNavigate();  
+  const [products, setProducts] = useState( [] )
 
 
   const getData = async (month = 1) => {
@@ -23,6 +25,9 @@ const [products, setProducts] = useState( [] )
   }
 
   useEffect( ()=>{
+    const auth =
+      JSON.parse(localStorage.getItem('auth'))
+      if(!auth)Navigator('/login')
       getData()
   }, [])
 

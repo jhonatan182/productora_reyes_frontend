@@ -1,7 +1,7 @@
-import { axiosPublic } from './axios';
+import { axiosPrivate } from './axios';
 
 const newProduct = (producto, descripcion, stock, precio_producto, proveedor_id) => {
-    return axiosPublic.post(
+    return axiosPrivate.post(
         '/productos/nuevo-producto',
         {
             producto, 

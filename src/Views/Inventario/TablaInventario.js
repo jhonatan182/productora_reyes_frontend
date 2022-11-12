@@ -41,6 +41,12 @@ const useStyles = makeStyles((theme) => ({
 
 function GetData() {
 const Navigator = useNavigate();
+  const Menu = () =>{
+     Navigator('/menu');
+  }
+  const SignIn = () =>{
+    Navigator('/login');
+  }
   const styles= useStyles();
   const [data, setData]= useState([]);
   const [modalInsertar, setModalInsertar]= useState(false);

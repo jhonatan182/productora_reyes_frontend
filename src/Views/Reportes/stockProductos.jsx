@@ -4,10 +4,12 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official"
 import { DateRange } from "@material-ui/icons";
 import { Select, ButtonGroup, Button } from "@material-ui/core";
+import { useNavigate } from 'react-router-dom';
 
 import NavigatorReportes from "./navigatorReportes";
 
 const StockProductos = () => {
+  const Navigator = useNavigate();  
   const [data, setData] = useState( [] );
 
 
@@ -20,6 +22,9 @@ const StockProductos = () => {
   }
 
   useEffect( ()=>{
+    const auth =
+      JSON.parse(localStorage.getItem('auth'))
+      if(!auth)Navigator('/login')
       getData()
   }, [])
 

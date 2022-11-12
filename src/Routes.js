@@ -3,6 +3,8 @@ import GetData from './Views/Inventario/TablaInventario';
 import LoginInUx from './Views/Login/LoginUX';
 import GetProveedores from './Views/Proveedores/TablaProveedores';
 import Menu from './Views/Menu';
+import GetClientes from './Views/Clientes/TablaClientes';
+import GetEmpleados from './Views/Empleados/TablaEmpleados';
 import ProductosMasVendidos from './Views/Reportes/productosMasVendidos';
 import ClientesCompras from './Views/Reportes/clienteCompra';
 import VentasEmpleados from './Views/Reportes/ventaPorEmpleado';
@@ -17,6 +19,8 @@ const Routes = () => {
         <Route path="/productos" element={<GetData />} />
         <Route path="/proveedores" element={<GetProveedores />} />
         <Route path="/menu" element={<Menu />} />
+        <Route path="/clientes" element={<GetClientes />} />
+        <Route path="/empleados" element={<GetEmpleados />} />
         <Route path="/reportes/productosMasVendidos" element={<ProductosMasVendidos />} />
         <Route path="/reportes/comprasClientes" element={<ClientesCompras />} />
         <Route path="/reportes/ventasEmpleados" element={<VentasEmpleados />} />
