@@ -1,8 +1,15 @@
+import React, { useEffect } from "react"
 import { Select, ButtonGroup, Button } from "@material-ui/core";
 import { useNavigate } from 'react-router-dom';
 
 export default function NavigatorReportes(){
     const Navigate = useNavigate();
+
+    useEffect( ()=>{
+        const auth =
+          JSON.parse(localStorage.getItem('auth'))
+          if(!auth)Navigate('/login')
+      }, [])
 
     return(
         <div>
