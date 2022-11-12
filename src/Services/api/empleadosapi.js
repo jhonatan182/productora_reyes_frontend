@@ -1,8 +1,8 @@
 import { axiosPrivate } from './axios';
 
-const newEmpleado = (nombre_empleado, apellido_empleado, identidad_empleado, telefono_empleado, correo_empleado, direccion_empleado, rol_id) => {
+const newEmpleado = (nombre_empleado, apellido_empleado, identidad_empleado, telefono_empleado, correo_empleado, direccion_empleado, rol_id, usuario, password) => {
     return axiosPrivate.post(
-        '/empleados/nuevo-empleado',
+        '/empleados/guardar',
         {
             nombre_empleado, 
             apellido_empleado, 
@@ -10,7 +10,9 @@ const newEmpleado = (nombre_empleado, apellido_empleado, identidad_empleado, tel
             telefono_empleado, 
             correo_empleado, 
             direccion_empleado, 
-            rol_id
+            rol_id, 
+            usuario, 
+            password
         }
         
     )
