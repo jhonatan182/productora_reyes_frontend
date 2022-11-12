@@ -6,14 +6,21 @@ import {Modal, TextField, Button, Icon} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import newProveedor from '../../Services/api/proveedoresapi';
 import { axiosPrivate } from '../../Services/api/axios';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import HomeIcon from '@mui/icons-material/Home';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const columns= [
-  { title: 'Nombre del proveedor', field: 'nombre_proveedor' },
-  { title: 'Descripcion del proveedor', field: 'descripcion_proveedor' },
-  { title: 'Identidad del proveedor', field: 'identidad_proveedor' },
-  { title: 'Telefono del proveedor', field: 'telefono_proveedor' },
-  { title: 'Correo del proveedor', field: 'correo_proveedor' },
-  { title: 'Direccion del proveedor', field: 'direccion_proveedor'},
+  { title: 'Nombre', field: 'nombre_proveedor' },
+  { title: 'Descripción', field: 'descripcion_proveedor' },
+  { title: 'Identidad', field: 'identidad_proveedor' },
+  { title: 'Telefono', field: 'telefono_proveedor' },
+  { title: 'Correo', field: 'correo_proveedor' },
+  { title: 'Dirección', field: 'direccion_proveedor'},
 ];
 const baseUrl="http://localhost:4000/api/proveedores/";
 
@@ -39,7 +46,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function GetProveedores() {
-const Navigator = useNavigate();
+  const Navigator = useNavigate();
+  const Menu = () =>{
+    Navigator('/menu');
+  }
+  const SignIn = () =>{
+    Navigator('/login');
+  }
   const styles= useStyles();
   const [data, setData]= useState([]);
   const [modalInsertar, setModalInsertar]= useState(false);
@@ -150,17 +163,17 @@ const Navigator = useNavigate();
   const bodyInsertar=(
     <div className={styles.modal}>
       <h3>Agregar Nuevo Proveedor</h3>
-      <TextField className={styles.inputMaterial} label="nombre proveedor" name="nombre_proveedor" onChange={handleChange}/>
+      <TextField className={styles.inputMaterial} label="Nombre del Proveedor" name="nombre_proveedor" onChange={handleChange}/>
       <br />
       <TextField className={styles.inputMaterial} label="Descripcion" name="descripcion_proveedor" onChange={handleChange}/>          
       <br />
-      <TextField className={styles.inputMaterial} label="identidad" name="identidad_proveedor" onChange={handleChange}/>
+      <TextField className={styles.inputMaterial} label="Identidad" name="identidad_proveedor" onChange={handleChange}/>
       <br />
-      <TextField className={styles.inputMaterial} label="telefono" name="telefono_proveedor" onChange={handleChange}/>
+      <TextField className={styles.inputMaterial} label="Telefono" name="telefono_proveedor" onChange={handleChange}/>
       <br />
-      <TextField className={styles.inputMaterial} label="correo Proveedor" name="correo_proveedor" onChange={handleChange}/>
+      <TextField className={styles.inputMaterial} label="Correo del Proveedor" name="correo_proveedor" onChange={handleChange}/>
       <br />
-      <TextField className={styles.inputMaterial} label="direccion Proveedor" name="direccion_proveedor" onChange={handleChange}/>
+      <TextField className={styles.inputMaterial} label="Direccion Proveedor" name="direccion_proveedor" onChange={handleChange}/>
       <br /><br />
       <div align="right">
         <Button color="primary" onClick={()=>peticionPost()}>Insertar</Button>
@@ -171,18 +184,18 @@ const Navigator = useNavigate();
 
   const bodyEditar=(
     <div className={styles.modal}>
-      <h3>Editar Proveedor</h3>-
-      <TextField className={styles.inputMaterial} label="nombre proveedor" name="nombre_proveedor" onChange={handleChange} value={formValues&&formValues.nombre_proveedor}/>
+      <h3>Editar Proveedor</h3>
+      <TextField className={styles.inputMaterial} label="Nombre de Proveedor" name="nombre_proveedor" onChange={handleChange} value={formValues&&formValues.nombre_proveedor}/>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_proveedor" onChange={handleChange} value={formValues&&formValues.descripcion_proveedor}/>          
       <br />
-      <TextField className={styles.inputMaterial} label="identidad" name="identidad_proveedor" onChange={handleChange} value={formValues&&formValues.identidad_proveedor}/>
+      <TextField className={styles.inputMaterial} label="Identidad" name="identidad_proveedor" onChange={handleChange} value={formValues&&formValues.identidad_proveedor}/>
       <br />
-      <TextField className={styles.inputMaterial} label="Telefono del proveedor" name="telefono_proveedor" onChange={handleChange} value={formValues&&formValues.telefono_proveedor}/>
+      <TextField className={styles.inputMaterial} label="Telefono del Proveedor" name="telefono_proveedor" onChange={handleChange} value={formValues&&formValues.telefono_proveedor}/>
       <br />
-      <TextField className={styles.inputMaterial} label="correo Proveedor" name="correo_proveedor" onChange={handleChange} value={formValues&&formValues.correo_proveedor}/>
+      <TextField className={styles.inputMaterial} label="Correo del Proveedor" name="correo_proveedor" onChange={handleChange} value={formValues&&formValues.correo_proveedor}/>
       <br />
-      <TextField className={styles.inputMaterial} label="direccion Proveedor" name="direccion_proveedor" onChange={handleChange} value={formValues&&formValues.direccion_proveedor}/>
+      <TextField className={styles.inputMaterial} label="Direccion Proveedor" name="direccion_proveedor" onChange={handleChange} value={formValues&&formValues.direccion_proveedor}/>
       <br />
       <br />
       <div align="right">
@@ -204,6 +217,28 @@ const Navigator = useNavigate();
 
   return (
     <div className="App">
+      <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+          <Toolbar>
+              <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    sx={{ mr: 2 }}
+              >
+                <HomeIcon onClick={Menu}></HomeIcon>
+                </IconButton>
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    Proycomer
+                </Typography>
+                <Button color="inherit">Usuario</Button>
+                <IconButton color="inherit">
+                    <LogoutIcon onClick={SignIn}></LogoutIcon>
+              </IconButton>
+          </Toolbar>
+      </AppBar>
+    </Box>
       <br />
       <Button onClick={()=>abrirCerrarModalInsertar()}>Agregar Proveedor</Button>
       <br /><br />
