@@ -56,7 +56,9 @@ const Navigator = useNavigate();
     telefono_empleado: '',
     correo_empleado: '',
     direccion_empleado: '',
-    rol_id: ''
+    rol_id: '',
+    usuario: '',
+    password: ''
 });
 
   const handleChange= e =>{
@@ -68,7 +70,7 @@ const Navigator = useNavigate();
   }
 
   const peticionGet=async()=>{
-    await axiosPrivate.get(process.env.REACT_APP_API_HOST + '/empleados/')
+    await axiosPrivate.get(process.env.REACT_APP_API_HOST + '/empleados/listar')
     .then(response=>{
      setData(response.data);
     }).catch(error=>{
@@ -85,7 +87,9 @@ const Navigator = useNavigate();
         formValues.telefono_empleado,
         formValues.correo_empleado,
         formValues.direccion_empleado,
-        formValues.rol_id
+        formValues.rol_id,
+        formValues.usuario,
+        formValues.password
         );
         abrirCerrarModalInsertar()
         window.location.reload();
@@ -96,7 +100,7 @@ const Navigator = useNavigate();
   }
 
   const peticionPut = async () => {
-    await axiosPrivate.put(process.env.REACT_APP_API_HOST + "/empleados/editar-empleado/" + formValues.id_empleado, formValues)
+    await axiosPrivate.put(process.env.REACT_APP_API_HOST + "/empleados/actualizar/" + formValues.id_empleado, formValues)
     .then(response => {
       var dataNueva = data;
       dataNueva.map(empleado => {
@@ -119,7 +123,7 @@ const Navigator = useNavigate();
   }
 
   const peticionDelete=async()=>{
-    await axiosPrivate.delete(process.env.REACT_APP_API_HOST + "/empleados/eliminar-empleado/" + formValues.id_empleado)
+    await axiosPrivate.delete(process.env.REACT_APP_API_HOST + "/empleados/eliminar/" + formValues.id_empleado)
     .then(response=>{
       setData(data.filter(empleado=>empleado.id_empleado!==formValues.id_empleado));
       abrirCerrarModalEliminar();
@@ -171,6 +175,10 @@ const Navigator = useNavigate();
       <TextField className={styles.inputMaterial} label="Direccion del empleado" name="direccion_empleado" onChange={handleChange}/>
       <br />
       <TextField className={styles.inputMaterial} label="Codido de Rol del Empleado" name="rol_id" onChange={handleChange}/>
+      <br />
+      <TextField className={styles.inputMaterial} label="Usuario" name="usuario" onChange={handleChange}/>
+      <br />
+      <TextField className={styles.inputMaterial} label="Password" name="password" onChange={handleChange}/>
       <br /><br />
       <div align="right">
         <Button color="primary" onClick={()=>peticionPost()}>Insertar</Button>
@@ -181,10 +189,10 @@ const Navigator = useNavigate();
 
   const bodyEditar=(
     <div className={styles.modal}>
-      <h3>Editar Producto</h3>l
+      <h3>Editar Producto</h3>
         <TextField className={styles.inputMaterial} label="Nombre del empleado" name="nombre_empleado" onChange={handleChange} value={formValues&&formValues.nombre_empleado}/>
         <br />
-        <TextField className={styles.inputMaterial} label="Apellido del empleado" name="apellido_empleado" onChange={handleChange} value={formValues&&formValues.empleado}/>          
+        <TextField className={styles.inputMaterial} label="Apellido del empleado" name="apellido_empleado" onChange={handleChange} value={formValues&&formValues.apellido_empleado}/>          
         <br />
         <TextField className={styles.inputMaterial} label="Identidad del empleado" name="identidad_empleado" onChange={handleChange} value={formValues&&formValues.identidad_empleado}/>
         <br />
