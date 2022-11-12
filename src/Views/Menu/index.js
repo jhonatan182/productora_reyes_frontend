@@ -57,7 +57,6 @@ const Menu = () => {
                 <div>
                     <Buttons>
                         <button class="button button1" onClick={productos}>Productos</button>
-                        <button class="button button2" onClick={SignIn}>Usuario</button>
                         <button class="button button1" onClick={empleados}>Empleados</button>
                         <button class="button button2" onClick={clientes}>Clientes</button>
                         <button class="button button2" onClick={proveedores}>Proveedores</button>

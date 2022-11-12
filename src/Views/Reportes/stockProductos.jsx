@@ -1,5 +1,5 @@
 import React, {useState, useEffect } from "react"
-import axios from "axios";
+import { axiosPrivate } from "../../Services/api/axios";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official"
 import { DateRange } from "@material-ui/icons";
@@ -14,7 +14,7 @@ const StockProductos = () => {
 
 
   const getData = async () => {
-    await axios.get('http://localhost:4000/api/reportes/productsStock').then((response) => {
+    await axiosPrivate.get('http://localhost:4000/api/reportes/productsStock').then((response) => {
         
         // console.log()
         setData(response.data);

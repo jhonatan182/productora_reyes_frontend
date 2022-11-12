@@ -8,6 +8,7 @@ import { Edit } from '@material-ui/icons';
 import { Delete } from '@material-ui/icons';
 import { Search } from '@material-ui/icons';
 import newEmpleado from '../../Services/api/empleadosapi';
+import HomeBar from '../../Components/HomeBar';
 
 const columns= [
   { title: 'Nombre del empleado', field: 'nombre_empleado' },
@@ -18,7 +19,6 @@ const columns= [
   { title: 'Direccion del empleado', field: 'direccion_empleado'},
   {title: 'Codigo de Rol del Empleado', field: 'rol_id'},
 ];
-const baseUrl="http://localhost:4000/api/empleados/";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -65,14 +65,12 @@ const Navigator = useNavigate();
       ...prevstate,
       [name]: value
     }))
-    console.log(formValues);
   }
 
   const peticionGet=async()=>{
-    await axiosPrivate.get(baseUrl)
+    await axiosPrivate.get(process.env.REACT_APP_API_HOST + '/empleados/')
     .then(response=>{
      setData(response.data);
-     console.log(response.data)
     }).catch(error=>{
       console.log(error);
     })
@@ -89,15 +87,16 @@ const Navigator = useNavigate();
         formValues.direccion_empleado,
         formValues.rol_id
         );
-        console.log(data);
-        Navigator('/empleados')
+        abrirCerrarModalInsertar()
+        window.location.reload();
+        alert("Empleado Insertado Correctamente")
       } catch (ex) {
         console.log(ex);
       }
   }
 
   const peticionPut = async () => {
-    await axiosPrivate.put(baseUrl + "editar-empleado/" + formValues.id_empleado, formValues)
+    await axiosPrivate.put(process.env.REACT_APP_API_HOST + "/empleados/editar-empleado/" + formValues.id_empleado, formValues)
     .then(response => {
       var dataNueva = data;
       dataNueva.map(empleado => {
@@ -113,16 +112,18 @@ const Navigator = useNavigate();
       });
       setData(dataNueva);
       abrirCerrarModalEditar();
+      alert("Empleado Editado Correctamente")
     }).catch(error => {
       console.log(error)
     })
   }
 
   const peticionDelete=async()=>{
-    await axiosPrivate.delete(baseUrl+"/eliminar-empleado/"+formValues.id_empleado)
+    await axiosPrivate.delete(process.env.REACT_APP_API_HOST + "/empleados/eliminar-empleado/" + formValues.id_empleado)
     .then(response=>{
       setData(data.filter(empleado=>empleado.id_empleado!==formValues.id_empleado));
       abrirCerrarModalEliminar();
+      alert("Empleado Eliminado Correctamente")
     }).catch(error=>{
       console.log(error);
     })
@@ -204,7 +205,7 @@ const Navigator = useNavigate();
 
   const bodyEliminar=(
     <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar el empleado<b>{formValues && formValues.nombre_empleado}</b>? </p>
+      <p>Estás seguro que deseas eliminar el empleado <b>{formValues && formValues.nombre_empleado}</b>? </p>
       <div align="right">
         <Button color="secondary" onClick={() => peticionDelete()}>Sí</Button>
         <Button onClick={()=>abrirCerrarModalEliminar()}>No</Button>
@@ -214,8 +215,9 @@ const Navigator = useNavigate();
 
   return (
     <div className="App">
+      <HomeBar/>
       <br />
-      <Button onClick={()=>abrirCerrarModalInsertar()}>Agregar Empleado</Button>
+      <Button style={{backgroundColor:'#ff4e4a', color:'white'}} onClick={()=>abrirCerrarModalInsertar()}>Agregar Empleado</Button>
       <br /><br />
      <MaterialTable
           columns={columns}

@@ -1,8 +1,8 @@
 import React, {useState, useEffect } from "react"
-import axios from "axios";
+import { axiosPrivate } from "../../Services/api/axios";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official"
-import { Select, MenuItem, InputLabel, FormControl, Input } from "@material-ui/core";
+import { Select, MenuItem, InputLabel, FormControl } from "@material-ui/core";
 import NavigatorReportes from "./navigatorReportes";
 import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ const VentasEmpleados = () => {
 
 
   const getData = async (month = 1) => {
-    await axios.get('http://localhost:4000/api/reportes/salesEmployee?month='+encodeURIComponent(month)).then((response) => {
+    await axiosPrivate.get('http://localhost:4000/api/reportes/salesEmployee?month='+encodeURIComponent(month)).then((response) => {
         
         // console.log()
         setData(response.data);
