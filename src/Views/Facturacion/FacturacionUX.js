@@ -13,6 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 //import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import { PropaneSharp } from '@mui/icons-material';
 //import MenuItem from '@mui/material/MenuItem';
 
 function clean (){
@@ -65,6 +66,15 @@ function subtotal(items) {
   return items.map(({total}) => total).reduce((sum,i) =>sum +i,0);
 }
 
+const transferValue = (event) => {
+  event.preventDefault();
+  const val = {
+    getDataProductos
+  };
+  props.func(val);
+  clearState();
+}
+
 const invoiceSubtotal = subtotal();
 const invoiceTaxes = impuesto * invoiceSubtotal;
 const invoiceTotal = invoiceTaxes + invoiceSubtotal;
@@ -87,7 +97,7 @@ const FacturacionUX = ({
         pageTitle="Facturacion"
       >
          <form style={{ minWidth: "380px", maxWidth: "640px"}}>
-            <h1 style={{textAlign: "center"}}>Factura</h1>
+            <h1 style={{textAlign: "center"}}>Facturacion</h1>
 
         </form>
         <Field
@@ -143,7 +153,7 @@ const FacturacionUX = ({
           onChange={onChangeHandler}
           helperText="Seleccione el Producto"
         />
-
+        <button class="button button1" onClick={transferValue}>Agregar Producto</button>
         <div>
           <TableContainer component={Paper}>
             <Table sx={{minWidth:700}} aria-lable="spanning table">
