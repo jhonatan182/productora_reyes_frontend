@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import MaterialTable from "material-table";
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {Modal, TextField, Button, Icon} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import newProveedor from '../../Services/api/proveedoresapi';
 import { axiosPrivate } from '../../Services/api/axios';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import HomeIcon from '@mui/icons-material/Home';
-import LogoutIcon from '@mui/icons-material/Logout';
+import HomeBar from '../../Components/HomeBar';
 
 const columns= [
   { title: 'Nombre', field: 'nombre_proveedor' },
@@ -22,7 +15,6 @@ const columns= [
   { title: 'Correo', field: 'correo_proveedor' },
   { title: 'Dirección', field: 'direccion_proveedor'},
 ];
-const baseUrl="http://localhost:4000/api/proveedores/";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -47,12 +39,6 @@ const useStyles = makeStyles((theme) => ({
 
 function GetProveedores() {
   const Navigator = useNavigate();
-  const Menu = () =>{
-    Navigator('/menu');
-  }
-  const SignIn = () =>{
-    Navigator('/login');
-  }
   const styles= useStyles();
   const [data, setData]= useState([]);
   const [modalInsertar, setModalInsertar]= useState(false);
@@ -74,14 +60,12 @@ function GetProveedores() {
       ...prevstate,
       [name]: value
     }))
-    console.log(formValues);
   }
 
   const peticionGet=async()=>{
-    await axiosPrivate.get(baseUrl)
+    await axiosPrivate.get(process.env.REACT_APP_API_HOST + '/proveedores/')
     .then(response=>{
      setData(response.data);
-     console.log(response.data)
     }).catch(error=>{
       console.log(error);
     })
@@ -97,15 +81,16 @@ function GetProveedores() {
             formValues.correo_proveedor,
             formValues.direccion_proveedor
         );
-        console.log(data);
-        Navigator('/proveedores')
+        abrirCerrarModalInsertar()
+        window.location.reload();
+        alert("Proveedor Insertado Correctamente")
       } catch (ex) {
         console.log(ex);
       }
   }
 
   const peticionPut = async () => {
-    await axiosPrivate.put(baseUrl + "actualizar/" + formValues.id_proveedor, formValues)
+    await axiosPrivate.put(process.env.REACT_APP_API_HOST + "/proveedores/actualizar/" + formValues.id_proveedor, formValues)
     .then(response => {
       var dataNueva = data;
       dataNueva.map(proveedor => {
@@ -120,15 +105,17 @@ function GetProveedores() {
       });
       setData(dataNueva);
       abrirCerrarModalEditar();
+      alert("Proveedor Editado Correctamente")
     }).catch(error => {
       console.log(error)
     })
   }
 
   const peticionDelete=async()=>{
-    await axiosPrivate.delete(baseUrl+"eliminar/"+formValues.id_proveedor)
+    await axiosPrivate.delete(process.env.REACT_APP_API_HOST + "/proveedores/eliminar/" + formValues.id_proveedor)
     .then(response=>{
       setData(data.filter(proveedor=>proveedor.id_proveedor!==formValues.id_proveedor));
+      alert("Proveedor Eliminado Correctamente")
       abrirCerrarModalEliminar();
     }).catch(error=>{
       console.log(error);
@@ -217,30 +204,9 @@ function GetProveedores() {
 
   return (
     <div className="App">
-      <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-          <Toolbar>
-              <IconButton
-                    size="large"
-                    edge="start"
-                    color="inherit"
-                    aria-label="menu"
-                    sx={{ mr: 2 }}
-              >
-                <HomeIcon onClick={Menu}></HomeIcon>
-                </IconButton>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Proycomer
-                </Typography>
-                <Button color="inherit">Usuario</Button>
-                <IconButton color="inherit">
-                    <LogoutIcon onClick={SignIn}></LogoutIcon>
-              </IconButton>
-          </Toolbar>
-      </AppBar>
-    </Box>
+      <HomeBar/>
       <br />
-      <Button onClick={()=>abrirCerrarModalInsertar()}>Agregar Proveedor</Button>
+      <Button style={{backgroundColor:'#ff4e4a', color:'white'}} onClick={()=>abrirCerrarModalInsertar()}>Agregar Proveedor</Button>
       <br /><br />
      <MaterialTable
           columns={columns}

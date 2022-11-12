@@ -1,4 +1,3 @@
-
 import postLogin from '../../Services/api/loginapi';
 import { setAuth } from '../../Services/api/axios';
 const LOGIN_LOADING = "LOGIN_LOADING";
@@ -11,10 +10,8 @@ export const submitLogin = async (dispatch, usuario, password) => {
   try {
     dispatch({ type: LOGIN_LOADING, payload: null });
     const { data } = await postLogin(usuario, password);
-    console.log(data)
     //localStorage.setItem('Nombre', data.nombre);
     dispatch({ type: LOGIN_SUCCESS, payload: data });
-    //console.log(data);
     setAuth(data.token);
     dispatch({ type: LOGIN_JWT_SET, payload: null });
   } catch (ex) {

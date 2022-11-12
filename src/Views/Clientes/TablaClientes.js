@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import MaterialTable from "material-table";
 import { axiosPrivate } from '../../Services/api/axios';
 import { useNavigate } from 'react-router-dom';
-import {Modal, TextField, Button, Icon} from '@material-ui/core';
+import {Modal, TextField, Button} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import { Edit } from '@material-ui/icons';
+import { Edit, Home } from '@material-ui/icons';
 import { Delete } from '@material-ui/icons';
 import { Search } from '@material-ui/icons';
 import newCliente from '../../Services/api/clientesapi';
+import HomeBar from '../../Components/HomeBar';
 
 const columns= [
   { title: 'Nombre del Cliente', field: 'nombre_cliente' },
@@ -17,8 +18,6 @@ const columns= [
   { title: 'Correo del Cliente', field: 'correo_cliente' },
   { title: 'Direccion del Cliente', field: 'direccion_cliente'},
 ];
-const baseUrl="http://localhost:4000/api/clientes/";
-
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -63,14 +62,12 @@ const Navigator = useNavigate();
       ...prevstate,
       [name]: value
     }))
-    console.log(formValues);
   }
 
   const peticionGet=async()=>{
-    await axiosPrivate.get(baseUrl)
+    await axiosPrivate.get(process.env.REACT_APP_API_HOST + '/clientes/')
     .then(response=>{
      setData(response.data);
-     console.log(response.data)
     }).catch(error=>{
       console.log(error);
     })
@@ -86,15 +83,16 @@ const Navigator = useNavigate();
         formValues.correo_cliente,
         formValues.direccion_cliente
         );
-        console.log(data);
-        Navigator('/clientes')
+        abrirCerrarModalInsertar()
+        window.location.reload();
+        alert("Cliente Insertado Correctamente")
       } catch (ex) {
         console.log(ex);
       }
   }
 
   const peticionPut = async () => {
-    await axiosPrivate.put(baseUrl + "editar-cliente/" + formValues.id_cliente, formValues)
+    await axiosPrivate.put(process.env.REACT_APP_API_HOST + "/clientes/editar-cliente/" + formValues.id_cliente, formValues)
     .then(response => {
       var dataNueva = data;
       dataNueva.map(cliente => {
@@ -109,16 +107,18 @@ const Navigator = useNavigate();
       });
       setData(dataNueva);
       abrirCerrarModalEditar();
+      alert("Cliente Editado Correctamente")
     }).catch(error => {
       console.log(error)
     })
   }
 
   const peticionDelete=async()=>{
-    await axiosPrivate.delete(baseUrl+"/eliminar-cliente/"+formValues.id_cliente)
+    await axiosPrivate.delete(process.env.REACT_APP_API_HOST + "/clientes/eliminar-cliente/" + formValues.id_cliente)
     .then(response=>{
       setData(data.filter(cliente=>cliente.id_cliente!==formValues.id_cliente));
       abrirCerrarModalEliminar();
+      alert("Cliente Eliminado Correctamente")
     }).catch(error=>{
       console.log(error);
     })
@@ -207,8 +207,9 @@ const Navigator = useNavigate();
 
   return (
     <div className="App">
+      <HomeBar/>
       <br />
-      <Button onClick={()=>abrirCerrarModalInsertar()}>Agregar Cliente</Button>
+      <Button style={{backgroundColor:'#ff4e4a', color:'white'}} onClick={()=>abrirCerrarModalInsertar()}>Agregar Cliente</Button>
       <br /><br />
      <MaterialTable
           columns={columns}

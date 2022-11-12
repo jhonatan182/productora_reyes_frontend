@@ -8,6 +8,7 @@ import newProduct from '../../Services/api/inventarioapi';
 import { Edit } from '@material-ui/icons';
 import { Delete } from '@material-ui/icons';
 import { Search } from '@material-ui/icons';
+import HomeBar from '../../Components/HomeBar';
 
 const columns= [
   { title: 'Producto', field: 'producto' },
@@ -16,8 +17,6 @@ const columns= [
   { title: 'Precio Producto', field: 'precio_producto' },
   { title: 'ID Proveedor', field: 'proveedor_id' },
 ];
-const baseUrl="http://localhost:4000/api/productos/";
-
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -67,14 +66,12 @@ const Navigator = useNavigate();
       ...prevstate,
       [name]: value
     }))
-    console.log(formValues);
   }
 
   const peticionGet=async()=>{
-    await axiosPrivate.get(baseUrl)
+    await axiosPrivate.get(process.env.REACT_APP_API_HOST + '/productos/')
     .then(response=>{
      setData(response.data);
-     console.log(response.data)
     }).catch(error=>{
       console.log(error);
     })
@@ -89,15 +86,16 @@ const Navigator = useNavigate();
         formValues.precio_producto,
         formValues.proveedor_id,
         );
-        console.log(data);
-        Navigator('/productos')
-      } catch (ex) {
-        console.log(ex);
-      }
+        abrirCerrarModalInsertar()
+        window.location.reload();
+        alert("Producto Insertado Correctamente")
+      } catch(error) {
+        alert("Error")
+    }
   }
 
   const peticionPut = async () => {
-    await axiosPrivate.put(baseUrl + "editar-producto/" + formValues.codigo_producto, formValues)
+    await axiosPrivate.put(process.env.REACT_APP_API_HOST + "/productos/editar-producto/" + formValues.codigo_producto, formValues)
     .then(response => {
       var dataNueva = data;
       dataNueva.map(producto => {
@@ -111,15 +109,17 @@ const Navigator = useNavigate();
       });
       setData(dataNueva);
       abrirCerrarModalEditar();
+      alert("Producto Editado Correctamente")
     }).catch(error => {
       console.log(error)
     })
   }
 
   const peticionDelete=async()=>{
-    await axiosPrivate.delete(baseUrl+"/eliminar-producto/"+formValues.codigo_producto)
+    await axiosPrivate.delete(process.env.REACT_APP_API_HOST + "/productos/eliminar-producto/" + formValues.codigo_producto)
     .then(response=>{
       setData(data.filter(producto=>producto.codigo_producto!==formValues.codigo_producto));
+      alert("Producto Eliminado Correctamente")
       abrirCerrarModalEliminar();
     }).catch(error=>{
       console.log(error);
@@ -204,8 +204,9 @@ const Navigator = useNavigate();
 
   return (
     <div className="App">
+      <HomeBar/>
       <br />
-      <Button onClick={()=>abrirCerrarModalInsertar()}>Agregar Producto</Button>
+      <Button style={{backgroundColor:'#ff4e4a', color:'white'}} onClick={()=>abrirCerrarModalInsertar()}>Agregar Producto</Button>
       <br /><br />
      <MaterialTable
           columns={columns}
