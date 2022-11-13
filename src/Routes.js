@@ -9,6 +9,7 @@ import ProductosMasVendidos from './Views/Reportes/productosMasVendidos';
 import ClientesCompras from './Views/Reportes/clienteCompra';
 import VentasEmpleados from './Views/Reportes/ventaPorEmpleado';
 import StockProductos from './Views/Reportes/stockProductos';
+import FacturacionUX from './Views/Facturacion/FacturacionUX';
 
 const Routes = () => {
   return (
@@ -21,6 +22,7 @@ const Routes = () => {
         <Route path="/menu" element={<Menu />} />
         <Route path="/clientes" element={<GetClientes />} />
         <Route path="/empleados" element={<GetEmpleados />} />
+        <Route path="/facturacion" element={<FacturacionUX />} />
         <Route path="/reportes/productosMasVendidos" element={<ProductosMasVendidos />} />
         <Route path="/reportes/comprasClientes" element={<ClientesCompras />} />
         <Route path="/reportes/ventasEmpleados" element={<VentasEmpleados />} />
