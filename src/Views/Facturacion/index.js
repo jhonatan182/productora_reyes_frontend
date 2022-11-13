@@ -1,4 +1,5 @@
 import FacturacionUX from "./FacturacionUX";
+import FacturacionForm from "./FacturacionForm";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import newFactura from "../../Services/api/facturacionapi";
@@ -7,13 +8,15 @@ import newFacturacion from "@Services/api/detalleFacturacionapi"
 const Facturacion = () => {
   const Navigator = useNavigate();
   const [formValues, setFormValues] = useState({ 
-    id: '',
-    nombre: '',
-    descripcion: '',
-    stock: '',
-    precio_producto: '',
-    proveedor_id: ''
+    cliente_id: '',
+    empleado_id: '',
+    numero_factura: '',
+    impuesto: '',
+    fecha_factura: '',
+    tipo_pago: '',
+    productos:'',
     });
+
   const onChangeHandler = (event) => {
     let { name, value } = event.target;
     let newFormValues = {
@@ -23,22 +26,19 @@ const Facturacion = () => {
     setFormValues(newFormValues);
   }
 
-  const onProductListClick = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    Navigator('/tablaInventario');
-  }
 
   const onSaveClick = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     try {
       const data = await newFactura(
-      formValues.nombre,
-      formValues.descripcion,
-      formValues.stock,
-      formValues.precio_producto,
-      formValues.proveedor_id,
+      formValues.cliente_id,
+      formValues.empleado_id,
+      formValues.numero_factura,
+      formValues.impuesto,
+      formValues.fecha_factura,
+      formValues.tipo_pago,
+      formValues.productos,
       );
       console.log(data);
       Navigator('/facturacion');
@@ -48,12 +48,14 @@ const Facturacion = () => {
   }
 
   return (
-    <FacturacionUx
-      nameValue = {formValues.nombre}
-      descValue = {formValues.descripcion}
-      stockValue = {formValues.stock}
-      priceValue = {formValues.precio_producto}
-      providerValue = {formValues.proveedor_id}
+    <FacturacionUX
+      clienteValue = {formValues.cliente_id}
+      empleadoValue = {formValues.empleado_id}
+      facturaValue = {formValues.numero_factura}
+      isvValue = {formValues.impuesto}
+      dateValue = {formValues.fecha_factura}
+      paymentValue = {formValues.tipo_pago}
+      productoValue = {formValues.productos}
       onProductListClick = {onProductListClick}
       onChangeHandler={onChangeHandler}
       onSaveClick={onSaveClick}

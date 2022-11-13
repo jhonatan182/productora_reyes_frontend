@@ -4,7 +4,8 @@ const newFactura = (cliente_id, numero_factura, impuesto, fecha_factura, tipo_pa
     return axiosPublic.post(
         '/facturacion/',
         {
-            cliente_id, 
+            cliente_id,
+            empleado_id,
             numero_factura, 
             impuesto, 
             fecha_factura, 

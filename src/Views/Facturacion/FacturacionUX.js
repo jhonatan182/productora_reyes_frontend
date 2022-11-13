@@ -3,18 +3,8 @@ import React, { useState } from 'react';
 import Page from "../../Components/Page"
 import { Field } from '../../Components/InputField';
 import Buttons from "../../Components/Buttons";
-//import Table from '@mui/material/Table';
-//import TableBody from '@mui/material/TableBody';
-//import TableCell from '@mui/material/TableCell';
-//import TableContainer from '@mui/material/TableContainer';
-//import TableHead from '@mui/material/TableHead';
-//import TableRow from '@mui/material/TableRow';
-//import Paper from '@mui/material/Paper';
-//import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-//import { PropaneSharp } from '@mui/icons-material';
-//import MenuItem from '@mui/material/MenuItem';
-import TableData from './FacturacionForm';
+//import TableData from './FacturacionForm';
 
 function clean (){
   window.location.reload();
@@ -28,7 +18,7 @@ function clean (){
     }).catch(error=>{console.log("Error")})
 }*/
 
-const tiposPago = [
+/*const tiposPago = [
   {
     value: 'EFE',
     label: 'Efectivo',
@@ -45,34 +35,8 @@ const tiposPago = [
     value: 'TRN',
     label: 'Transferencia',
   }
-]
+]*/
 
-//const impuesto = 0.15;
-
-//function ccyFormat(num){
-//  return `${num.toFixed(2)}`;
-//}
-
-//function totalRow(cantidad, precio_unitario){
-//  return cantidad*precio_unitario;
-//}
-
-//function createRow(producto,cantidad,precio_unitario) {
-//  const total = totalRow(cantidad, precio_unitario);
-//  return {producto, cantidad, precio_unitario, total}
-//}
-
-//function subtotal(items) {
-// return items.map(({total}) => total).reduce((sum,i) =>sum +i,0);
-//}
-
-//const clearState = () => {
-//  setProducts('');
-//}
-
-//const invoiceSubtotal = subtotal();
-//const invoiceTaxes = impuesto * invoiceSubtotal;
-//const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
 const FacturacionUX = ({
     clienteIdValue = "",
@@ -80,8 +44,8 @@ const FacturacionUX = ({
     facturaValue = "",
     dateValue = "",
     isvValue = "",
-    //paymentValue = "",
-    producto = "",
+    paymentValue = "",
+    productoValue = "",
     onChangeHandler = () => { },
     onSaveClick = () => {},
     
@@ -134,25 +98,19 @@ const FacturacionUX = ({
         <TextField
           id="tipo_pago"
           name="tipo_pago"
-          select
+          type="text"
           label="Tipo de Pago"
-          value={tiposPago}
+          value={paymentValue}
           onChange={onChangeHandler}
-          helperText="Seleccione el Tipo de Pago"
         />
         <TextField
           id="producto"
           name="producto"
-          select
+          type="text"
           label="Productos"
-          value={producto}
+          value={productoValue}
           onChange={onChangeHandler}
-          helperText="Seleccione el Producto"
         />
-        <div>
-          <TableData />
-        </div>
-
         <div style={{justifyContent: "center"}}>
         <Buttons>
           <button class="button button1" onClick={onSaveClick}>Ingresar Producto</button>

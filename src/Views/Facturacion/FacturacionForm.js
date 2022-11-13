@@ -28,10 +28,11 @@ function TableData() {
     return (
         <div>
             <FacturacionTable func={addRows} />
-            <table className="table table-stripped">
+            <div style={{justifyContent: "center"}}>
+            <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Num</th>
                         <th>Producto</th>
                         <th>Descripcion</th>
                         <th>Precio Unitario</th>
@@ -39,6 +40,7 @@ function TableData() {
                 </thead>
                 <tbody>{tableRows}</tbody>
             </table>
+            </div>
         </div>
     );
 
