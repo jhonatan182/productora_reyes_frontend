@@ -1,258 +1,348 @@
 import React, { useState, useEffect } from 'react';
-import MaterialTable from "material-table";
-import { useNavigate } from 'react-router-dom';
-import {Modal, TextField, Button} from '@material-ui/core';
+import MaterialTable from 'material-table';
+import { useNavigate, redirect } from 'react-router-dom';
+import { Modal, TextField, Button } from '@material-ui/core';
 import { axiosPrivate } from '../../Services/api/axios';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import newProduct from '../../Services/api/inventarioapi';
 import { Edit } from '@material-ui/icons';
 import { Delete } from '@material-ui/icons';
 import { Search } from '@material-ui/icons';
-import HomeBar from '../../Components/HomeBar';
 
-const columns= [
-  { title: 'Producto', field: 'producto' },
-  { title: 'Descripcion', field: 'descripcion' },
-  { title: 'Stock', field: 'stock' },
-  { title: 'Precio Producto', field: 'precio_producto' },
-  { title: 'ID Proveedor', field: 'proveedor_id' },
+const columns = [
+    { title: 'Producto', field: 'producto' },
+    { title: 'Descripcion', field: 'descripcion' },
+    { title: 'Stock', field: 'stock' },
+    { title: 'Precio Producto', field: 'precio_producto' },
+    { title: 'ID Proveedor', field: 'proveedor_id' },
 ];
 
 const useStyles = makeStyles((theme) => ({
-  modal: {
-    position: 'absolute',
-    width: 400,
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)'
-  },
-  iconos:{
-    cursor: 'pointer'
-  }, 
-  inputMaterial:{
-    width: '100%'
-  }
+    modal: {
+        position: 'absolute',
+        width: 400,
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+    },
+    iconos: {
+        cursor: 'pointer',
+    },
+    inputMaterial: {
+        width: '100%',
+    },
 }));
 
 function GetData() {
-const Navigator = useNavigate();
-  const Menu = () =>{
-     Navigator('/menu');
-  }
-  const SignIn = () =>{
-    Navigator('/login');
-  }
-  const styles= useStyles();
-  const [data, setData]= useState([]);
-  const [modalInsertar, setModalInsertar]= useState(false);
-  const [modalEditar, setModalEditar]= useState(false);
-  const [modalEliminar, setModalEliminar]= useState(false);
-  const [formValues, setFormValues] = useState({ 
-    codigo_producto: '',
-    producto: '',
-    descripcion: '',
-    stock: '',
-    precio_producto: '',
-    proveedor_id: ''
-});
+    const Navigator = useNavigate();
 
-  const handleChange= e =>{
-    const { name, value } = e.target;
-    setFormValues(prevstate => ({
-      ...prevstate,
-      [name]: value
-    }))
-  }
+    const styles = useStyles();
+    const [data, setData] = useState([]);
+    const [modalInsertar, setModalInsertar] = useState(false);
+    const [modalEditar, setModalEditar] = useState(false);
+    const [modalEliminar, setModalEliminar] = useState(false);
+    const [formValues, setFormValues] = useState({
+        codigo_producto: '',
+        producto: '',
+        descripcion: '',
+        stock: '',
+        precio_producto: '',
+        proveedor_id: '',
+    });
 
-  const peticionGet=async()=>{
-    await axiosPrivate.get(process.env.REACT_APP_API_HOST + '/productos/')
-    .then(response=>{
-     setData(response.data);
-    }).catch(error=>{
-      console.log(error);
-    })
-  }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormValues((prevstate) => ({
+            ...prevstate,
+            [name]: value,
+        }));
+    };
 
-  const peticionPost = async () => {
-    try {
-        const data = await newProduct(
-        formValues.producto,
-        formValues.descripcion,
-        formValues.stock,
-        formValues.precio_producto,
-        formValues.proveedor_id,
-        );
-        abrirCerrarModalInsertar()
-        window.location.reload();
-        alert("Producto Insertado Correctamente")
-      } catch(error) {
-        alert("Error")
-    }
-  }
+    const peticionGet = async () => {
+        await axiosPrivate
+            .get(process.env.REACT_APP_API_HOST + '/productos/')
+            .then((response) => {
+                setData(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
-  const peticionPut = async () => {
-    await axiosPrivate.put(process.env.REACT_APP_API_HOST + "/productos/editar-producto/" + formValues.codigo_producto, formValues)
-    .then(response => {
-      var dataNueva = data;
-      dataNueva.map(producto => {
-        if (producto.codigo_producto === formValues.codigo_producto){
-          producto.producto=formValues.producto;
-          producto.descripcion=formValues.descripcion;
-          producto.stock=formValues.stock;
-          producto.precio_producto=formValues.precio_producto;
-          producto.proveedor_id=formValues.proveedor_id;
+    const peticionPost = async () => {
+        try {
+            const data = await newProduct(
+                formValues.producto,
+                formValues.descripcion,
+                formValues.stock,
+                formValues.precio_producto,
+                formValues.proveedor_id
+            );
+            abrirCerrarModalInsertar();
+            alert('Producto Insertado Correctamente');
+        } catch (error) {
+            alert('Error');
         }
-      });
-      setData(dataNueva);
-      abrirCerrarModalEditar();
-      alert("Producto Editado Correctamente")
-    }).catch(error => {
-      console.log(error)
-    })
-  }
+    };
 
-  const peticionDelete=async()=>{
-    await axiosPrivate.delete(process.env.REACT_APP_API_HOST + "/productos/eliminar-producto/" + formValues.codigo_producto)
-    .then(response=>{
-      setData(data.filter(producto=>producto.codigo_producto!==formValues.codigo_producto));
-      alert("Producto Eliminado Correctamente")
-      abrirCerrarModalEliminar();
-    }).catch(error=>{
-      console.log(error);
-    })
-  }
+    const peticionPut = async () => {
+        await axiosPrivate
+            .put(
+                process.env.REACT_APP_API_HOST +
+                    '/productos/editar-producto/' +
+                    formValues.codigo_producto,
+                formValues
+            )
+            .then((response) => {
+                var dataNueva = data;
+                dataNueva.map((producto) => {
+                    if (
+                        producto.codigo_producto === formValues.codigo_producto
+                    ) {
+                        producto.producto = formValues.producto;
+                        producto.descripcion = formValues.descripcion;
+                        producto.stock = formValues.stock;
+                        producto.precio_producto = formValues.precio_producto;
+                        producto.proveedor_id = formValues.proveedor_id;
+                    }
+                });
+                setData(dataNueva);
+                abrirCerrarModalEditar();
+                alert('Producto Editado Correctamente');
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
-  const seleccionarProducto=(nombre, caso)=>{
-    setFormValues(nombre);
-    (caso==="Editar")?abrirCerrarModalEditar()
-    :
-    abrirCerrarModalEliminar()
-  }
+    const peticionDelete = async () => {
+        await axiosPrivate
+            .delete(
+                process.env.REACT_APP_API_HOST +
+                    '/productos/eliminar-producto/' +
+                    formValues.codigo_producto
+            )
+            .then((response) => {
+                setData(
+                    data.filter(
+                        (producto) =>
+                            producto.codigo_producto !==
+                            formValues.codigo_producto
+                    )
+                );
+                alert('Producto Eliminado Correctamente');
+                abrirCerrarModalEliminar();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
-  const abrirCerrarModalInsertar=()=>{
-    setModalInsertar(!modalInsertar);
-  }
+    const seleccionarProducto = (nombre, caso) => {
+        setFormValues(nombre);
+        caso === 'Editar'
+            ? abrirCerrarModalEditar()
+            : abrirCerrarModalEliminar();
+    };
 
-  const abrirCerrarModalEditar=()=>{
-    setModalEditar(!modalEditar);
-  }
+    const abrirCerrarModalInsertar = () => {
+        setModalInsertar(!modalInsertar);
+    };
 
-  const abrirCerrarModalEliminar=()=>{
-    setModalEliminar(!modalEliminar);
-  }
+    const abrirCerrarModalEditar = () => {
+        setModalEditar(!modalEditar);
+    };
 
-  useEffect(()=>{
-    const auth =
-      JSON.parse(localStorage.getItem('auth'))
-      if(!auth)Navigator('/login')
-    peticionGet();
-  }, [])
+    const abrirCerrarModalEliminar = () => {
+        setModalEliminar(!modalEliminar);
+    };
 
-  const bodyInsertar=(
-    <div className={styles.modal}>
-      <h3>Agregar Nuevo Producto</h3>
-      <TextField className={styles.inputMaterial} label="Producto" name="producto" onChange={handleChange}/>
-      <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion" onChange={handleChange}/>          
-      <br />
-      <TextField className={styles.inputMaterial} label="Stock" name="stock" onChange={handleChange}/>
-      <br />
-      <TextField className={styles.inputMaterial} label="Precio Producto" name="precio_producto" onChange={handleChange}/>
-      <br />
-      <TextField className={styles.inputMaterial} label="ID Proveedor" name="proveedor_id" onChange={handleChange}/>
-      <br /><br />
-      <div align="right">
-        <Button color="primary" onClick={()=>peticionPost()}>Insertar</Button>
-        <Button onClick={()=>abrirCerrarModalInsertar()}>Cancelar</Button>
-      </div>
-    </div>
-  )
+    useEffect(() => {
+        const auth = JSON.parse(localStorage.getItem('auth'));
+        if (!auth) {
+            Navigator('/login');
+            return;
+        }
 
-  const bodyEditar=(
-    <div className={styles.modal}>
-      <h3>Editar Producto</h3>
-        <TextField className={styles.inputMaterial} label="Producto" name="producto" onChange={handleChange} value={formValues&&formValues.producto}/>
-        <br />
-        <TextField className={styles.inputMaterial} label="Descripcion" name="descripcion" onChange={handleChange} value={formValues&&formValues.descripcion}/>          
-        <br />
-        <TextField className={styles.inputMaterial} label="Stock" name="stock" onChange={handleChange} value={formValues&&formValues.stock}/>
-        <br />
-        <TextField className={styles.inputMaterial} label="Precio Producto" name="precio_producto" onChange={handleChange} value={formValues&&formValues.precio_producto}/>
-        <br />
-        <TextField className={styles.inputMaterial} label="ID Proveedor" name="proveedor_id" onChange={handleChange} value={formValues&&formValues.proveedor_id}/>
-        <br /><br />
-      <div align="right">
-        <Button color="primary" onClick={() => peticionPut()}>Editar</Button>
-        <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
-      </div>
-    </div>
-  )
+        peticionGet();
+    }, []);
 
-  const bodyEliminar=(
-    <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar el producto <b>{formValues && formValues.producto}</b>? </p>
-      <div align="right">
-        <Button color="secondary" onClick={() => peticionDelete()}>Sí</Button>
-        <Button onClick={()=>abrirCerrarModalEliminar()}>No</Button>
-      </div>
-    </div>
-  )
+    const bodyInsertar = (
+        <div className={styles.modal}>
+            <h3>Agregar Nuevo Producto</h3>
+            <TextField
+                className={styles.inputMaterial}
+                label="Producto"
+                name="producto"
+                onChange={handleChange}
+            />
+            <br />
+            <TextField
+                className={styles.inputMaterial}
+                label="Descripción"
+                name="descripcion"
+                onChange={handleChange}
+            />
+            <br />
+            <TextField
+                className={styles.inputMaterial}
+                label="Stock"
+                name="stock"
+                onChange={handleChange}
+            />
+            <br />
+            <TextField
+                className={styles.inputMaterial}
+                label="Precio Producto"
+                name="precio_producto"
+                onChange={handleChange}
+            />
+            <br />
+            <TextField
+                className={styles.inputMaterial}
+                label="ID Proveedor"
+                name="proveedor_id"
+                onChange={handleChange}
+            />
+            <br />
+            <br />
+            <div align="right">
+                <Button color="primary" onClick={() => peticionPost()}>
+                    Insertar
+                </Button>
+                <Button onClick={() => abrirCerrarModalInsertar()}>
+                    Cancelar
+                </Button>
+            </div>
+        </div>
+    );
 
-  return (
-    <div className="App">
-      <HomeBar/>
-      <br />
-      <Button style={{backgroundColor:'#ff4e4a', color:'white'}} onClick={()=>abrirCerrarModalInsertar()}>Agregar Producto</Button>
-      <br /><br />
-     <MaterialTable
-          columns={columns}
-          data={data}
-          title="Inventario"  
-          actions={[
-            {
-              icon: Edit,
-              tooltip: 'Editar Producto',
-              onClick: (event, rowData) => seleccionarProducto(rowData, "Editar")
-            },
-            {
-              icon: Delete,
-              tooltip: 'Eliminar Producto',
-              onClick: (event, rowData) => seleccionarProducto(rowData, "Eliminar")
-            }
-          ]}
-          options={{
-            actionsColumnIndex: -1,
-            search: Search,
-          }}
-          localization={{
-            header:{
-              actions: "Acciones"
-            }
-          }}
-        />
-        <Modal
-           open={modalInsertar}
-           onClose={abrirCerrarModalInsertar}>
-           {bodyInsertar}
-        </Modal>
+    const bodyEditar = (
+        <div className={styles.modal}>
+            <h3>Editar Producto</h3>
+            <TextField
+                className={styles.inputMaterial}
+                label="Producto"
+                name="producto"
+                onChange={handleChange}
+                value={formValues && formValues.producto}
+            />
+            <br />
+            <TextField
+                className={styles.inputMaterial}
+                label="Descripcion"
+                name="descripcion"
+                onChange={handleChange}
+                value={formValues && formValues.descripcion}
+            />
+            <br />
+            <TextField
+                className={styles.inputMaterial}
+                label="Stock"
+                name="stock"
+                onChange={handleChange}
+                value={formValues && formValues.stock}
+            />
+            <br />
+            <TextField
+                className={styles.inputMaterial}
+                label="Precio Producto"
+                name="precio_producto"
+                onChange={handleChange}
+                value={formValues && formValues.precio_producto}
+            />
+            <br />
+            <TextField
+                className={styles.inputMaterial}
+                label="ID Proveedor"
+                name="proveedor_id"
+                onChange={handleChange}
+                value={formValues && formValues.proveedor_id}
+            />
+            <br />
+            <br />
+            <div align="right">
+                <Button color="primary" onClick={() => peticionPut()}>
+                    Editar
+                </Button>
+                <Button onClick={() => abrirCerrarModalEditar()}>
+                    Cancelar
+                </Button>
+            </div>
+        </div>
+    );
 
-        <Modal
-          open={modalEditar}
-          onClose={abrirCerrarModalEditar}>
-          {bodyEditar}
-        </Modal>
+    const bodyEliminar = (
+        <div className={styles.modal}>
+            <p>
+                Estás seguro que deseas eliminar el producto{' '}
+                <b>{formValues && formValues.producto}</b>?{' '}
+            </p>
+            <div align="right">
+                <Button color="secondary" onClick={() => peticionDelete()}>
+                    Sí
+                </Button>
+                <Button onClick={() => abrirCerrarModalEliminar()}>No</Button>
+            </div>
+        </div>
+    );
 
-        <Modal
-          open={modalEliminar}
-          onClose={abrirCerrarModalEditar}>
-          {bodyEliminar}
-        </Modal>
-    </div>
-  );
+    return (
+        <div className="App">
+            <br />
+            <Button
+                style={{ backgroundColor: '#ff4e4a', color: 'white' }}
+                onClick={() => abrirCerrarModalInsertar()}
+            >
+                Agregar Producto
+            </Button>
+            <br />
+            <br />
+            <MaterialTable
+                columns={columns}
+                data={data}
+                title="Inventario"
+                actions={[
+                    {
+                        icon: Edit,
+                        tooltip: 'Editar Producto',
+                        onClick: (event, rowData) =>
+                            seleccionarProducto(rowData, 'Editar'),
+                    },
+                    {
+                        icon: Delete,
+                        tooltip: 'Eliminar Producto',
+                        onClick: (event, rowData) =>
+                            seleccionarProducto(rowData, 'Eliminar'),
+                    },
+                ]}
+                options={{
+                    actionsColumnIndex: -1,
+                    search: Search,
+                }}
+                localization={{
+                    header: {
+                        actions: 'Acciones',
+                    },
+                }}
+            />
+            <Modal open={modalInsertar} onClose={abrirCerrarModalInsertar}>
+                {bodyInsertar}
+            </Modal>
+
+            <Modal open={modalEditar} onClose={abrirCerrarModalEditar}>
+                {bodyEditar}
+            </Modal>
+
+            <Modal open={modalEliminar} onClose={abrirCerrarModalEditar}>
+                {bodyEliminar}
+            </Modal>
+        </div>
+    );
 }
 
 export default GetData;

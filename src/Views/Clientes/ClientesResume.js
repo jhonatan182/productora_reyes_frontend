@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MUIDataTable from 'mui-datatables';
-import MaterialTable from 'material-table';
 import axios from 'axios';
-import { Modal, Buttton, TextField } from '@material-ui/core';
-import Buttons from '../../Components/Buttons';
 import Clientes from '.';
 
 export const TableAxios = () => {
@@ -11,18 +8,19 @@ export const TableAxios = () => {
     const [clientes, setClientes] = useState([]);
 
     //2 - fcion para mostrar los datos con axios
-    const endpoint = `${process.env.REACT_APP_API_HOST}/clientes/`;
-
-    const getData = async () => {
-        await axios.get(endpoint).then((response) => {
-            const data = response.data;
-            console.log(data);
-            setClientes(data);
-        });
-    };
-
     useEffect(() => {
-        getData();
+        const consultarClientes = async () => {
+            try {
+                const { data } = await axios.get(
+                    `${process.env.REACT_APP_API_HOST}/clientes/`
+                );
+                setClientes(data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        consultarClientes();
     }, []);
 
     //3 - Definimos las columns

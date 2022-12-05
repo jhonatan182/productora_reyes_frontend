@@ -1,31 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import MUIDataTable from 'mui-datatables';
-import MaterialTable from 'material-table';
-import axios from 'axios';
-import { Modal, Buttton, TextField } from '@material-ui/core';
-import Buttons from '../../Components/Buttons';
-import Empleados from '.';
 
 export const TableAxios = () => {
-    //1 - configuramos Los hooks
-    const [empleados, setEmpleados] = useState([]);
-
-    //2 - fcion para mostrar los datos con axios
-    const endpoint = `${process.env.REACT_APP_API_HOST}/empleados/`;
-
-    const getData = async () => {
-        await axios.get(endpoint).then((response) => {
-            const data = response.data;
-            console.log(data);
-            setEmpleados(data);
-        });
-    };
-
-    useEffect(() => {
-        getData();
-    }, []);
-
-    //3 - Definimos las columns
     const columns = [
         {
             name: 'nombre_empleado',
@@ -60,7 +35,6 @@ export const TableAxios = () => {
     return (
         <MUIDataTable
             title={'Tabla de Empleados'}
-            data={empleados}
             columns={columns}
             actions={[
                 {
